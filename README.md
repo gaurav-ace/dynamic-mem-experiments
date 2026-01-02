@@ -55,3 +55,40 @@ That is why "use-after-free" is seen in code as that memory is still there.
 
 -> delete : 
  calls the destructor
+
+----------------------
+Phase 2 :
+----------------------
+
+handling new for array of memory block, delete for array of memory block
+standard is :
+
+int *p = new int[5]; (5*4(size of int in this sys) = 20 bytes)
+
+delete[] p;
+
+so, how will the allocator that there are more than one blocks of memory to be allocated
+also, delete also needs to know how many blocks of memory to free.
+
+so, we have store the count of the blocks as well.
+
+runtime must know :
+Know how many elements were allocated
+Call destructor for each element
+Then free memory
+
+the count is stored before the usable pointer
+earlier design :
+[ BlockHeader ][ user memory ]
+
+extended design : 
+[ BlockHeader ][ array_count ][ user memory ]
+
+
+BlockHeader {
+    size_t size;
+    size_t flags; // 0th bit -> free?, 1st bit -> is_array.                                                                                            // it gives clear idea of sizeof(BlockHeader) : no padding like phase 1.
+    BlockHeader* next;
+} 
+
+

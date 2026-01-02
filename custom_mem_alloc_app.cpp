@@ -1,5 +1,6 @@
 #include <iostream>
-#include "custom_new_delete.h"
+#include "custom_new_delete_ptr_array.h"
+//#include "custom_new_delete.h"
 
 int main() {
     
@@ -10,11 +11,18 @@ int main() {
     std::cout << p << " -> "<< *p << "\n";
     my_free(p);
 
-    p = new int(); // this internally calls custom operator new, size is known by type (compiler deduces this).
-    // new int(someval) ==> allocates memory of one int, then calls the constructor and initilaizes with someval.
-    *p = 31;
-    std::cout << p << " -> "<< *p << "\n";
-    delete p;  // this internally calls desctructor of data type and then call custom operator delete 
-    
+    int* a = new int;
+    *a = 10;
+
+    int* b = new int;
+    *b = 20;
+
+    delete a;
+    delete b;
+
+    int* arr = new int[5];
+    arr[0] = 1;
+    arr[4] = 5;
+    delete[] arr;
     return 0;
 }
